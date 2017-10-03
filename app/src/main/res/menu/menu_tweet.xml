@@ -4,12 +4,17 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
 xmlns:tools="http://schemas.android.com/tools"
 tools:context="com.codepath.jennifergodinez.nytimessearch.activities.TimelineActivity">
 
-<item
-    android:id="@+id/twit"
-    android:orderInCategory="2"
-    android:icon="@drawable/twitter_logo"
-    app:showAsAction="ifRoom|withText"
-    android:title="Filter">
+    <item
+        android:orderInCategory="3"
+        android:title="Item"
+        android:icon="@drawable/ic_myprofile"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/twit"
+        android:orderInCategory="2"
+        android:icon="@drawable/twitter_feather"
+        app:showAsAction="ifRoom|withText"
+        android:title="Filter">
 </item>
 
 

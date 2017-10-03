@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="off_white">#f2f2f2</color>
-    <color name="tweet_blue">#2db7ef</color>
+    <color name="off_white">#f8f8f8</color>
+    <color name="tweet_blue">#1C85B0</color>
 </resources>

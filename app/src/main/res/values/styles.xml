@@ -2,6 +2,7 @@
 
     <style name="AppBaseTheme" parent="Theme.AppCompat.Light.DarkActionBar">
 
+        <item name="colorAccent">@color/tweet_blue</item>
     </style>
 
     <!-- Application theme. -->
