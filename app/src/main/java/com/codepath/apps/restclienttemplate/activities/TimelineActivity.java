@@ -1,18 +1,19 @@
 package com.codepath.apps.restclienttemplate.activities;
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.codepath.apps.restclienttemplate.R;
+import com.codepath.apps.restclienttemplate.adapters.TweetsPagerAdapter;
 import com.codepath.apps.restclienttemplate.fragments.TweetFragment;
-import com.codepath.apps.restclienttemplate.fragments.TweetsListFragment;
 
 public class TimelineActivity extends AppCompatActivity implements TweetFragment.ComposeTweetListener  {
 
-    TweetsListFragment fragmentTweetsList;
 
 
     @Override
@@ -20,7 +21,11 @@ public class TimelineActivity extends AppCompatActivity implements TweetFragment
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
 
-        fragmentTweetsList = (TweetsListFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_timeline);
+        ViewPager viewPager = (ViewPager)findViewById(R.id.viewpager);
+        viewPager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager(), this));
+
+        TabLayout tabLayout = (TabLayout)findViewById(R.id.sliding_tabs);
+        tabLayout.setupWithViewPager(viewPager);
 
     }
 
