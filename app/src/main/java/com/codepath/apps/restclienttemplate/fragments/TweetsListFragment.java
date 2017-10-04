@@ -16,6 +16,7 @@ import com.codepath.apps.restclienttemplate.models.Tweet;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -65,5 +66,24 @@ public class TweetsListFragment extends Fragment {
             tweetAdapter.notifyItemInserted(tweets.size()-1);
         }
     }
+
+    public void insertToFirst (JSONObject response) {
+        // add new tweet
+        Tweet t = null;
+        try {
+            t = Tweet.fromJSON(response);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        tweets.add(0, t);
+        tweetAdapter.notifyItemInserted(0);
+        // make sure we can view it on top of home timeline
+        rvTweets.scrollToPosition(0);
+    }
+
+    public long getId (int pos) {
+        return tweets.get(pos).uid;
+    }
+
 
 }

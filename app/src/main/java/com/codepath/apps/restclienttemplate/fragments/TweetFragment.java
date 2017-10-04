@@ -87,7 +87,7 @@ public class TweetFragment extends DialogFragment {
 
                 ComposeTweetListener l = (ComposeTweetListener)getActivity();
                 //TODO  uncomment this to pass new tweet
-                // l.onPassTweetMsg(etTweetMsg.getText().toString());
+                 l.onPassTweetMsg(etTweetMsg.getText().toString());
                 // Close the dialog and return back to the parent activity
                 dismiss();
             }

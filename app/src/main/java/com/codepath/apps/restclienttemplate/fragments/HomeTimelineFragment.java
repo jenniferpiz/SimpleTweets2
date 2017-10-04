@@ -134,6 +134,37 @@ public class HomeTimelineFragment extends TweetsListFragment {
         });
     }
 
+    public void postNewTweet(String s) {
+
+        // update first before posting new tweet
+        //populateTimeline(- getId(0)); //TODO get latest populateTimeLine from the other project
+
+        client.postNewTweet(s, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                insertToFirst(response);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                throwable.printStackTrace();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                throwable.printStackTrace();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                throwable.printStackTrace();
+            }
+
+        });
+
+    }
+
+
     public User getUser() {
         return this.user;
     }

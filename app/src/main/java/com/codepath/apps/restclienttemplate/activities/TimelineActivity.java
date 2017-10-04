@@ -74,6 +74,10 @@ public class TimelineActivity extends AppCompatActivity implements TweetFragment
 
     @Override
     public void onPassTweetMsg(String s) {
+        Fragment page = pagerAdapter.getRegisteredFragment(0);
+        if (page != null && page instanceof HomeTimelineFragment) {
+            ((HomeTimelineFragment)page).postNewTweet(s);
+        }
     }
 
 }
