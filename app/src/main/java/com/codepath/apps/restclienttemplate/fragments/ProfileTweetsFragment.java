@@ -4,10 +4,12 @@ import android.os.Bundle;
 
 import com.codepath.apps.restclienttemplate.TwitterApp;
 import com.codepath.apps.restclienttemplate.TwitterClient;
+import com.codepath.apps.restclienttemplate.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -17,10 +19,21 @@ import cz.msebera.android.httpclient.Header;
 
 public class ProfileTweetsFragment extends  TweetsListFragment {
     TwitterClient client;
+    User user;
+
+    public static ProfileTweetsFragment newInstance(User user) {
+        ProfileTweetsFragment fragment = new ProfileTweetsFragment();
+        Bundle args = new Bundle();
+        args.putParcelable("user", Parcels.wrap(user));
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        user = (User) Parcels.unwrap(getArguments().getParcelable("user"));
+
         client = TwitterApp.getRestClient();
 
         populate();
@@ -29,8 +42,7 @@ public class ProfileTweetsFragment extends  TweetsListFragment {
 
 
     private void populate() {
-       // client.getUserTweets(user.screenName, new JsonHttpResponseHandler() {
-       client.getUserTweets("jennpg233", new JsonHttpResponseHandler() { //TODO return to original
+       client.getUserTweets(user.screenName, new JsonHttpResponseHandler() {
 
            @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {

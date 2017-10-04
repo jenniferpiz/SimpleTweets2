@@ -61,6 +61,13 @@
         android:layout_marginTop="8dp"
         android:background="@color/tweet_blue" />
 
+    <FrameLayout
+        android:id="@+id/tweetsList_placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </FrameLayout>
+
+    <!--  TODO  delete
     <fragment
         android:id="@+id/fragmentTweetsList"
         android:name="com.codepath.apps.restclienttemplate.fragments.ProfileTweetsFragment"
@@ -72,7 +79,7 @@
         android:layout_alignParentTop="true"
         tools:layout="@layout/fragment_tweets_list" />
 
-    <!--
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvUserTweet"
         android:layout_width="match_parent"

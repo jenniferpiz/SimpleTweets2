@@ -3,6 +3,7 @@ package com.codepath.apps.restclienttemplate.activities;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.codepath.apps.restclienttemplate.R;
 import com.codepath.apps.restclienttemplate.TwitterApp;
 import com.codepath.apps.restclienttemplate.TwitterClient;
+import com.codepath.apps.restclienttemplate.fragments.ProfileTweetsFragment;
 import com.codepath.apps.restclienttemplate.models.User;
 
 import org.parceler.Parcels;
@@ -51,6 +53,11 @@ public class ShowProfileActivity extends AppCompatActivity {
 
         ImageView ivProfileImg = (ImageView) findViewById(R.id.ivProfileImg);
         Glide.with(this).load(Uri.parse(user.profileImageUrl)).into(ivProfileImg);
+
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ProfileTweetsFragment fragmentDemo = ProfileTweetsFragment.newInstance(user);
+        ft.replace(R.id.tweetsList_placeholder, fragmentDemo);
+        ft.commit();
 
 
     }
