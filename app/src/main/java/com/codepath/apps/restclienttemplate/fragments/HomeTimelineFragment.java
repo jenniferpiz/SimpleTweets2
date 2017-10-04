@@ -27,7 +27,7 @@ public class HomeTimelineFragment extends TweetsListFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         client = TwitterApp.getRestClient();
-        getMyProfile(); //TODO delete method below
+        getMyProfile();
         populateTimeline();
 
     }

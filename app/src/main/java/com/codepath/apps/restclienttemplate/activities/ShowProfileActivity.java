@@ -33,23 +33,17 @@ public class ShowProfileActivity extends AppCompatActivity {
 
         client = TwitterApp.getRestClient();
 
-        //TODO  directly assign in setters
-        String name = user.name;
-        String userName = user.screenName;
-        int nFollowing = user.countFollowing;
-        int nFollowers = user.countFollowers;
-
         TextView tvName = (TextView) findViewById(R.id.tvName);
-        tvName.setText(name);
+        tvName.setText(user.name);
 
         TextView tvUserName = (TextView) findViewById(R.id.tvUserName);
-        tvUserName.setText(String.format("@" + userName));
+        tvUserName.setText(String.format("@" + user.screenName));
 
         TextView tvFollowing = (TextView) findViewById(R.id.tvFollowing);
-        tvFollowing.setText(String.format(nFollowing + " Following")); //TODO use %1$
+        tvFollowing.setText(String.format(user.countFollowing + " Following")); //TODO use %1$
 
         TextView tvFollowers = (TextView) findViewById(R.id.tvFollowers);
-        tvFollowers.setText(nFollowers + " Followers");
+        tvFollowers.setText(user.countFollowers + " Followers");
 
         ImageView ivProfileImg = (ImageView) findViewById(R.id.ivProfileImg);
         Glide.with(this).load(Uri.parse(user.profileImageUrl)).into(ivProfileImg);
