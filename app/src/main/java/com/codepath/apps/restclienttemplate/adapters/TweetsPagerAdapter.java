@@ -3,8 +3,8 @@ package com.codepath.apps.restclienttemplate.adapters;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 
+import com.codepath.apps.restclienttemplate.SmartFragmentStatePagerAdapter;
 import com.codepath.apps.restclienttemplate.fragments.HomeTimelineFragment;
 import com.codepath.apps.restclienttemplate.fragments.MentionsTimelineFragment;
 
@@ -12,7 +12,7 @@ import com.codepath.apps.restclienttemplate.fragments.MentionsTimelineFragment;
  * Created by jennifergodinez on 10/3/17.
  */
 
-public class TweetsPagerAdapter extends FragmentPagerAdapter {
+public class TweetsPagerAdapter extends SmartFragmentStatePagerAdapter {
     private String[] tabTitles = {"Home", "Mentions"};
     private Context context;
 

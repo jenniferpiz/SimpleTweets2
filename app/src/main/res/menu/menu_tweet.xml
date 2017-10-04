@@ -5,6 +5,7 @@ xmlns:tools="http://schemas.android.com/tools"
 tools:context="com.codepath.jennifergodinez.nytimessearch.activities.TimelineActivity">
 
     <item
+        android:id="@+id/myprofile"
         android:orderInCategory="3"
         android:title="Item"
         android:icon="@drawable/ic_myprofile"

@@ -1,4 +1,4 @@
-package adapters;
+package com.codepath.apps.restclienttemplate.adapters;
 
 import android.content.Context;
 import android.graphics.Color;

@@ -2,6 +2,7 @@ package com.codepath.apps.restclienttemplate.models;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 import java.util.ArrayList;
 
@@ -9,6 +10,7 @@ import java.util.ArrayList;
  * Created by jennifergodinez on 9/25/17.
  */
 
+@Parcel
 public class User {
     public String name;
     public long uid;

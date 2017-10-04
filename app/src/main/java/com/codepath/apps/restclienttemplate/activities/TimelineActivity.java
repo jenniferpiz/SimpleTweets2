@@ -1,7 +1,9 @@
 package com.codepath.apps.restclienttemplate.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -10,19 +12,25 @@ import android.view.MenuItem;
 
 import com.codepath.apps.restclienttemplate.R;
 import com.codepath.apps.restclienttemplate.adapters.TweetsPagerAdapter;
+import com.codepath.apps.restclienttemplate.fragments.HomeTimelineFragment;
 import com.codepath.apps.restclienttemplate.fragments.TweetFragment;
+import com.codepath.apps.restclienttemplate.models.User;
+
+import org.parceler.Parcels;
 
 public class TimelineActivity extends AppCompatActivity implements TweetFragment.ComposeTweetListener  {
 
-
+    TweetsPagerAdapter pagerAdapter;
+    ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
 
-        ViewPager viewPager = (ViewPager)findViewById(R.id.viewpager);
-        viewPager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager(), this));
+        viewPager = (ViewPager)findViewById(R.id.viewpager);
+        pagerAdapter = new TweetsPagerAdapter(getSupportFragmentManager(), this);
+        viewPager.setAdapter(pagerAdapter);
 
         TabLayout tabLayout = (TabLayout)findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
@@ -47,6 +55,16 @@ public class TimelineActivity extends AppCompatActivity implements TweetFragment
                 FragmentManager fm = getSupportFragmentManager();
                 TweetFragment tweetFragment = TweetFragment.newInstance("Some Title");
                 tweetFragment.show(fm, "fragment_tweet");
+                return true;
+
+            case R.id.myprofile:
+                Fragment page = pagerAdapter.getRegisteredFragment(0);
+                if (page != null && page instanceof HomeTimelineFragment) {
+                    User user = ((HomeTimelineFragment)page).getUser();
+                    Intent intent = new Intent(this, ShowProfileActivity.class);
+                    intent.putExtra("user", Parcels.wrap(user));
+                    startActivity(intent);
+                }
                 return true;
 
             default:
