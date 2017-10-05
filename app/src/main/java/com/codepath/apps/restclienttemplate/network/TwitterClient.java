@@ -11,15 +11,8 @@ import com.loopj.android.http.RequestParams;
 
 /*
  * 
- * This is the object responsible for communicating with a REST API. 
- * Specify the constants below to change the API being communicated with.
- * See a full list of supported API classes: 
- *   https://github.com/scribejava/scribejava/tree/master/scribejava-apis/src/main/java/com/github/scribejava/apis
- * Key and Secret are provided by the developer site for the given API i.e dev.twitter.com
- * Add methods for each relevant endpoint in the API.
- * 
- * NOTE: You may want to rename this object based on the service i.e TwitterClient or FlickrClient
- * 
+ * This is the object responsible for communicating with Twitter REST API.
+  *
  */
 public class TwitterClient extends OAuthBaseClient {
 	public static final BaseApi REST_API_INSTANCE = TwitterApi.instance(); // Change this
@@ -44,35 +37,36 @@ public class TwitterClient extends OAuthBaseClient {
 						context.getString(R.string.intent_scheme), context.getPackageName(), FALLBACK_URL));
 	}
 
+	public enum GetType {HOME, MENTIONS, PROFILE}
 
-	public void getHomeTimeline(long id, AsyncHttpResponseHandler handler) {
-		String apiUrl = getApiUrl("statuses/home_timeline.json");
+
+	public void getTimeline(GetType type, long id, String screenName, AsyncHttpResponseHandler handler) {
+        String apiStr;
+
+        switch (type)  {
+            case HOME:
+                apiStr = "statuses/home_timeline.json";
+                break;
+            case MENTIONS:
+                apiStr = "statuses/mentions_timeline.json";
+                break;
+            case PROFILE:
+                apiStr = "statuses/user_timeline.json";
+                break;
+            default:
+                return;
+        }
+
+		String apiUrl = getApiUrl(apiStr);
 		RequestParams params = new RequestParams();
 		params.put("count", maxTweets);
 		String idParam = (id <= 1) ? "since_id" : "max_id";
+        if (type == GetType.PROFILE) {
+            params.put("screen_name", screenName);
+        }
 		params.put(idParam, Long.toString(Math.abs(id)));
 		client.get(apiUrl, params, handler);
 	}
-
-
-	public void getMentionsTimeline(long id, AsyncHttpResponseHandler handler) {
-		String apiUrl = getApiUrl("statuses/mentions_timeline.json");
-		RequestParams params = new RequestParams();
-		params.put("count", maxTweets);
-        String idParam = (id <= 1) ? "since_id" : "max_id";
-        params.put(idParam, Long.toString(Math.abs(id)));
-		client.get(apiUrl, params, handler);
-	}
-
-    public void getUserTweets(String screenName, long id, AsyncHttpResponseHandler handler) {
-        String apiUrl = getApiUrl("statuses/user_timeline.json");
-        RequestParams params = new RequestParams();
-        params.put("count", maxTweets);
-        params.put("screen_name", screenName);
-        String idParam = (id <= 1) ? "since_id" : "max_id";
-        params.put(idParam, Long.toString(Math.abs(id)));
-        client.get(apiUrl, params, handler);
-    }
 
 	public void postNewTweet(String post, AsyncHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("statuses/update.json");

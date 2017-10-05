@@ -3,9 +3,6 @@ package com.codepath.apps.restclienttemplate.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.codepath.apps.restclienttemplate.TwitterApp;
 import com.codepath.apps.restclienttemplate.models.User;
@@ -35,14 +32,6 @@ public class HomeTimelineFragment extends TweetsListFragment {
 
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        View view = super.onCreateView(inflater, container, savedInstanceState);
-
-        //TODO delete this whole function
-        return view;
-    }
 
     private void getMyProfile() {
         client.getProfileInfo(new JsonHttpResponseHandler() {
@@ -84,7 +73,7 @@ public class HomeTimelineFragment extends TweetsListFragment {
         }
         */
 
-        client.getHomeTimeline(id, new JsonHttpResponseHandler() {
+        client.getTimeline(TwitterClient.GetType.HOME, id, "", new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 Log.d("TwitterClient", response.toString());
@@ -117,7 +106,7 @@ public class HomeTimelineFragment extends TweetsListFragment {
     public void postNewTweet(String s) {
 
         // update first before posting new tweet
-        //populateTimeline(- getId(0)); //TODO get latest populateTimeLine from the other project
+        populateTimeline(- getId(0));
 
         client.postNewTweet(s, new JsonHttpResponseHandler() {
             @Override

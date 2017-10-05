@@ -29,7 +29,7 @@ public class MentionsTimelineFragment extends  TweetsListFragment {
     }
 
     void populateTimeline(final long id) {
-        client.getMentionsTimeline(id, new JsonHttpResponseHandler() {
+        client.getTimeline(TwitterClient.GetType.MENTIONS, id, "", new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 Log.d("TwitterClient", response.toString());
