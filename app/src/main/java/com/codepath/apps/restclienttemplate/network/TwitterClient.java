@@ -1,7 +1,8 @@
-package com.codepath.apps.restclienttemplate;
+package com.codepath.apps.restclienttemplate.network;
 
 import android.content.Context;
 
+import com.codepath.apps.restclienttemplate.R;
 import com.codepath.oauth.OAuthBaseClient;
 import com.github.scribejava.apis.TwitterApi;
 import com.github.scribejava.core.builder.api.BaseApi;
@@ -32,6 +33,8 @@ public class TwitterClient extends OAuthBaseClient {
 	// See https://developer.chrome.com/multidevice/android/intents
 	public static final String REST_CALLBACK_URL_TEMPLATE = "intent://%s#Intent;action=android.intent.action.VIEW;scheme=%s;package=%s;S.browser_fallback_url=%s;end";
 
+    public static final int maxTweets = 25;
+
 	public TwitterClient(Context context) {
 		super(context, REST_API_INSTANCE,
 				REST_URL,
@@ -40,21 +43,23 @@ public class TwitterClient extends OAuthBaseClient {
 				String.format(REST_CALLBACK_URL_TEMPLATE, context.getString(R.string.intent_host),
 						context.getString(R.string.intent_scheme), context.getPackageName(), FALLBACK_URL));
 	}
-	// CHANGE THIS
-	// DEFINE METHODS for different API endpoints here
-	public void getHomeTimeline(AsyncHttpResponseHandler handler) {
+
+
+	public void getHomeTimeline(long id, AsyncHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("statuses/home_timeline.json");
 		// Can specify query string params directly or through RequestParams.
 		RequestParams params = new RequestParams();
-		params.put("count", 25);
-		params.put("since_id", "1");
+		params.put("count", maxTweets);
+		String idParam = (id <= 1) ? "since_id" : "max_id";
+		params.put(idParam, Long.toString(Math.abs(id)));
 		client.get(apiUrl, params, handler);
 	}
+
 
 	public void getMentionsTimeline(AsyncHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("statuses/mentions_timeline.json");
 		RequestParams params = new RequestParams();
-		params.put("count", 25);
+		params.put("count", maxTweets);
 		params.put("since_id", "1");
 		client.get(apiUrl, params, handler);
 	}
@@ -76,7 +81,7 @@ public class TwitterClient extends OAuthBaseClient {
 	public void getUserTweets(String screenName, AsyncHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("statuses/user_timeline.json");
 		RequestParams params = new RequestParams();
-		params.put("count", 25);
+		params.put("count", maxTweets);
 		params.put("screen_name", screenName);
 		client.get(apiUrl, params, handler);
 	}

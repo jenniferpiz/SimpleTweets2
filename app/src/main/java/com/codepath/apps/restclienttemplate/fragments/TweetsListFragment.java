@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.codepath.apps.restclienttemplate.R;
 import com.codepath.apps.restclienttemplate.adapters.TweetAdapter;
 import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.codepath.apps.restclienttemplate.utils.EndlessRecyclerViewScrollListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,9 +26,11 @@ import java.util.ArrayList;
  */
 
 public class TweetsListFragment extends Fragment {
-    private TweetAdapter tweetAdapter;
-    private ArrayList<Tweet> tweets;
-    private RecyclerView rvTweets;
+    TweetAdapter tweetAdapter;
+    ArrayList<Tweet> tweets;
+    RecyclerView rvTweets;
+    LinearLayoutManager linearLayoutManager;
+    EndlessRecyclerViewScrollListener scrollListener;
 
 
     @Override
@@ -37,6 +40,7 @@ public class TweetsListFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_tweets_list, container, false);
 
         rvTweets = (RecyclerView) view.findViewById(R.id.rvTweet);
@@ -47,7 +51,8 @@ public class TweetsListFragment extends Fragment {
         tweets = new ArrayList<>();
         tweetAdapter = new TweetAdapter(tweets);
 
-        rvTweets.setLayoutManager(new LinearLayoutManager(getContext()));
+        linearLayoutManager = new LinearLayoutManager(getContext());
+        rvTweets.setLayoutManager(linearLayoutManager);
         rvTweets.setAdapter(tweetAdapter);
 
         return view;

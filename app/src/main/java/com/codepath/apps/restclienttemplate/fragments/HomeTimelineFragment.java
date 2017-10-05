@@ -2,11 +2,16 @@ package com.codepath.apps.restclienttemplate.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.codepath.apps.restclienttemplate.TwitterApp;
-import com.codepath.apps.restclienttemplate.TwitterClient;
 import com.codepath.apps.restclienttemplate.models.User;
+import com.codepath.apps.restclienttemplate.network.TwitterClient;
+import com.codepath.apps.restclienttemplate.utils.EndlessRecyclerViewScrollListener;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
@@ -28,8 +33,27 @@ public class HomeTimelineFragment extends TweetsListFragment {
         super.onCreate(savedInstanceState);
         client = TwitterApp.getRestClient();
         getMyProfile();
-        populateTimeline();
+        populateTimeline(1);
 
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        View view = super.onCreateView(inflater, container, savedInstanceState);
+
+        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                final int curSize = tweetAdapter.getItemCount();
+                populateTimeline(getId(curSize-1));
+
+            }
+        };
+
+        rvTweets.addOnScrollListener(scrollListener);
+
+        return view;
     }
 
     private void getMyProfile() {
@@ -63,8 +87,16 @@ public class HomeTimelineFragment extends TweetsListFragment {
     }
 
 
-    private void populateTimeline () {
-        client.getHomeTimeline(new JsonHttpResponseHandler() {
+    public void populateTimeline (final long id) {
+/*
+        if (!isOnline()) {
+            Toast.makeText(getApplicationContext(), "No internet detected!",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
+        */
+
+        client.getHomeTimeline(id, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 Log.d("TwitterClient", response.toString());

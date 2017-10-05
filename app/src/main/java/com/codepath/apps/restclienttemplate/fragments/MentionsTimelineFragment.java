@@ -5,7 +5,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.codepath.apps.restclienttemplate.TwitterApp;
-import com.codepath.apps.restclienttemplate.TwitterClient;
+import com.codepath.apps.restclienttemplate.network.TwitterClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;

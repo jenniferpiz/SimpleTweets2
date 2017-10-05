@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.codepath.apps.restclienttemplate.R;
 import com.codepath.apps.restclienttemplate.TwitterApp;
-import com.codepath.apps.restclienttemplate.TwitterClient;
+import com.codepath.apps.restclienttemplate.network.TwitterClient;
 import com.codepath.apps.restclienttemplate.fragments.ProfileTweetsFragment;
 import com.codepath.apps.restclienttemplate.models.User;
 
