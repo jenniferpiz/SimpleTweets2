@@ -21,17 +21,20 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import static com.codepath.apps.restclienttemplate.network.TwitterClient.maxTweets;
+
 /**
  * Created by jennifergodinez on 10/2/17.
  */
 
-public class TweetsListFragment extends Fragment {
+public abstract class TweetsListFragment extends Fragment {
     TweetAdapter tweetAdapter;
     ArrayList<Tweet> tweets;
     RecyclerView rvTweets;
     LinearLayoutManager linearLayoutManager;
     EndlessRecyclerViewScrollListener scrollListener;
 
+    abstract void populateTimeline(long id);
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,11 +58,25 @@ public class TweetsListFragment extends Fragment {
         rvTweets.setLayoutManager(linearLayoutManager);
         rvTweets.setAdapter(tweetAdapter);
 
+        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                final int curSize = tweetAdapter.getItemCount();
+                populateTimeline(getId(curSize-1));
+
+            }
+        };
+
+        rvTweets.addOnScrollListener(scrollListener);
+
         return view;
 
     }
 
-    public void addItems(JSONArray response) {
+    public void addItems(JSONArray response, boolean append) {
+
+        ArrayList<Tweet> newTweets = new ArrayList<Tweet>();
+
         for (int i = 0; i < response.length(); i++) {
             Tweet tweet = null;
             try {
@@ -67,10 +84,42 @@ public class TweetsListFragment extends Fragment {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            tweets.add(tweet);
-            tweetAdapter.notifyItemInserted(tweets.size()-1);
+            newTweets.add(tweet);
         }
+
+        if (!append) {
+
+            int n_tweets = newTweets.size();
+
+            // if too many new tweets, we just clear everything and start fresh
+            if (n_tweets > (maxTweets - 1)) {
+                int size = tweets.size();
+                tweets.clear();
+                tweetAdapter.notifyItemRangeRemoved(0, size );
+            }
+
+            if (n_tweets >0 ) {
+                tweets.addAll(0, newTweets);
+                tweetAdapter.notifyItemRangeInserted(0, n_tweets);
+            }
+
+        } else {
+            //check if first = last
+            if (newTweets.size() > 0 && tweets.size() > 0 &&
+                    newTweets.get(0).uid == tweets.get(tweets.size()-1).uid) {
+                //remove first tweet
+                newTweets.remove(0);
+            }
+
+            // append new tweets to our list
+            int n_tweets = newTweets.size();
+            int oldSize = tweets.size();
+            tweets.addAll(newTweets);
+            tweetAdapter.notifyItemRangeInserted(oldSize, n_tweets);
+        }
+
     }
+
 
     public void insertToFirst (JSONObject response) {
         // add new tweet
@@ -85,6 +134,7 @@ public class TweetsListFragment extends Fragment {
         // make sure we can view it on top of home timeline
         rvTweets.scrollToPosition(0);
     }
+
 
     public long getId (int pos) {
         return tweets.get(pos).uid;

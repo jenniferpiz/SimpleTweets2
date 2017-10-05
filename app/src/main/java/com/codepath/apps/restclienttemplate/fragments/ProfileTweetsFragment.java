@@ -36,13 +36,14 @@ public class ProfileTweetsFragment extends  TweetsListFragment {
 
         client = TwitterApp.getRestClient();
 
-        populate();
+        populateTimeline(1);
 
     }
 
 
-    private void populate() {
-       client.getUserTweets(user.screenName, new JsonHttpResponseHandler() {
+    void populateTimeline(final long id) {
+
+       client.getUserTweets(user.screenName, id, new JsonHttpResponseHandler() {
 
            @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -52,7 +53,7 @@ public class ProfileTweetsFragment extends  TweetsListFragment {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
 
-                addItems(response);
+                addItems(response, id > 0);
                 super.onSuccess(statusCode, headers, response);
             }
 

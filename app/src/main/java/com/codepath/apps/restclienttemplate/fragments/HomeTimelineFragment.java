@@ -2,7 +2,6 @@ package com.codepath.apps.restclienttemplate.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.view.ViewGroup;
 import com.codepath.apps.restclienttemplate.TwitterApp;
 import com.codepath.apps.restclienttemplate.models.User;
 import com.codepath.apps.restclienttemplate.network.TwitterClient;
-import com.codepath.apps.restclienttemplate.utils.EndlessRecyclerViewScrollListener;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
@@ -42,17 +40,7 @@ public class HomeTimelineFragment extends TweetsListFragment {
 
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                final int curSize = tweetAdapter.getItemCount();
-                populateTimeline(getId(curSize-1));
-
-            }
-        };
-
-        rvTweets.addOnScrollListener(scrollListener);
-
+        //TODO delete this whole function
         return view;
     }
 
@@ -87,7 +75,7 @@ public class HomeTimelineFragment extends TweetsListFragment {
     }
 
 
-    public void populateTimeline (final long id) {
+    void populateTimeline (final long id) {
 /*
         if (!isOnline()) {
             Toast.makeText(getApplicationContext(), "No internet detected!",
@@ -106,7 +94,7 @@ public class HomeTimelineFragment extends TweetsListFragment {
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 Log.d("TwitterClient", response.toString());
 
-                addItems(response);
+                addItems(response, id > 0);
             }
 
             @Override
