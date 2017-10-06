@@ -13,6 +13,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+
 import cz.msebera.android.httpclient.Header;
 
 /**
@@ -22,12 +24,17 @@ import cz.msebera.android.httpclient.Header;
 public class HomeTimelineFragment extends TweetsListFragment {
     TwitterClient client;
     User user;
+    User friend;
+    HashMap<String, User> friends;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         client = TwitterApp.getRestClient();
         getMyProfile();
+        //getFriendsProfile();
+        //getFriendProfile("jennpg233");
+        friends = new HashMap<String, User>();
         populateTimeline(1);
 
     }
@@ -62,6 +69,86 @@ public class HomeTimelineFragment extends TweetsListFragment {
         });
 
     }
+
+    void getFriendsProfile()  { //TODO delete
+        client.getFriendsList(new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                User f;
+                try {
+                    /*  TODO move this outside
+                    int cursor = -1;
+                    String cursor_param = "";
+                    do {
+                        //friend = User.fromJSON(response);
+                        url_with_cursor = api_path + "&cursor=" + cursor
+                        cursor = response.getInt("next_cursor");
+                    } while (cursor != 0);
+                    */
+
+                    JSONArray list = response.getJSONArray("users");
+                    if (list == null) return;
+                    for (int i=0; i< list.length(); i++) {
+                        f = User.fromJSON((JSONObject)list.get(i));
+                        friends.put(f.screenName, f);
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                new Throwable().printStackTrace();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                new Throwable().printStackTrace();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                new Throwable().printStackTrace();
+            }
+        });
+    }
+
+
+    public void getFriendProfile(final String screenName)  {
+
+        client.getTimeline(TwitterClient.GetType.USERPROFILE, 0, screenName, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    if (friends.containsKey(screenName)) {
+                        return;
+                    }
+                    friends.put(screenName, User.fromJSON(response));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                new Throwable().printStackTrace();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                new Throwable().printStackTrace();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                new Throwable().printStackTrace();
+            }
+        });
+
+    }
+
 
 
     void populateTimeline (final long id) {
@@ -136,6 +223,10 @@ public class HomeTimelineFragment extends TweetsListFragment {
 
     public User getUser() {
         return this.user;
+    }
+
+    public User getFriend(String screenName) {
+        return friends.get(screenName);
     }
 
 }

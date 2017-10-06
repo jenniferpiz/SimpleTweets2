@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,11 +27,18 @@ import java.util.Locale;
 
 public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> {
 
-    private List<Tweet> mTweets;
-    private Context context;
+    List<Tweet> mTweets;
+    Context context;
+    AdapterCallback callback;
 
-    public TweetAdapter(List<Tweet> mTweets) {
+    public interface AdapterCallback{
+        void onTweetUserClicked(String screenName);
+    }
+
+    public TweetAdapter(List<Tweet> mTweets, AdapterCallback callback) {
+
         this.mTweets = mTweets;
+        this.callback = callback;
     }
 
     @Override
@@ -55,6 +63,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
 
         holder.tvTimeStamp.setText(getRelativeTimeAgo(tweet.createdAt));
 
+        final String screenName = tweet.user.screenName;
         holder.tvScreenName.setText("@"+tweet.user.screenName);
         holder.tvScreenName.setTextColor(Color.DKGRAY);
 
@@ -66,8 +75,19 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             holder.ivDisplay.setVisibility(View.GONE);
         }
 
-
         Glide.with(context).load(tweet.user.profileImageUrl).into(holder.ivProfileImage);
+        holder.ivProfileImage.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Log.d("DEBUG", "onClick Profile Image"); //TODO delete
+                // call the interface in the activity?
+                if(callback != null) {
+                    callback.onTweetUserClicked(screenName);
+                }
+            }
+
+        });
 
     }
 

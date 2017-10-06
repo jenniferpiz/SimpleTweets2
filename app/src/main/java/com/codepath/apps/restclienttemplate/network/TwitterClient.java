@@ -37,7 +37,7 @@ public class TwitterClient extends OAuthBaseClient {
 						context.getString(R.string.intent_scheme), context.getPackageName(), FALLBACK_URL));
 	}
 
-	public enum GetType {HOME, MENTIONS, PROFILE}
+	public enum GetType {HOME, MENTIONS, MIPROFILE, USERPROFILE}
 
 
 	public void getTimeline(GetType type, long id, String screenName, AsyncHttpResponseHandler handler) {
@@ -50,8 +50,11 @@ public class TwitterClient extends OAuthBaseClient {
             case MENTIONS:
                 apiStr = "statuses/mentions_timeline.json";
                 break;
-            case PROFILE:
+            case MIPROFILE:
                 apiStr = "statuses/user_timeline.json";
+                break;
+            case USERPROFILE:
+                apiStr = "users/show.json";
                 break;
             default:
                 return;
@@ -61,12 +64,19 @@ public class TwitterClient extends OAuthBaseClient {
 		RequestParams params = new RequestParams();
 		params.put("count", maxTweets);
 		String idParam = (id <= 1) ? "since_id" : "max_id";
-        if (type == GetType.PROFILE) {
+        if (type == GetType.MIPROFILE || type == GetType.USERPROFILE) {
             params.put("screen_name", screenName);
         }
 		params.put(idParam, Long.toString(Math.abs(id)));
 		client.get(apiUrl, params, handler);
 	}
+
+    public void getFriendsList(AsyncHttpResponseHandler handler /*, counter */) {
+        String apiUrl = getApiUrl("friends/list.json?cursor=-1&screen_name=jennpg233&skip_status=true&include_user_entities=false");
+        RequestParams params = new RequestParams();
+        //params.put("status", post);
+        client.post(apiUrl, params, handler);
+    }
 
 	public void postNewTweet(String post, AsyncHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("statuses/update.json");

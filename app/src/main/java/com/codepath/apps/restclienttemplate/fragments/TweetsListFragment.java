@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.codepath.apps.restclienttemplate.R;
+import com.codepath.apps.restclienttemplate.activities.TimelineActivity;
 import com.codepath.apps.restclienttemplate.adapters.TweetAdapter;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.apps.restclienttemplate.utils.EndlessRecyclerViewScrollListener;
@@ -52,7 +53,12 @@ public abstract class TweetsListFragment extends Fragment {
         rvTweets.addItemDecoration(itemDecoration);
 
         tweets = new ArrayList<>();
-        tweetAdapter = new TweetAdapter(tweets);
+
+        if (getActivity() instanceof TimelineActivity) { //TODO shorten it using ? :
+            tweetAdapter = new TweetAdapter(tweets, (TimelineActivity) getActivity());
+        } else {
+            tweetAdapter = new TweetAdapter(tweets, null);
+        }
 
         linearLayoutManager = new LinearLayoutManager(getContext());
         rvTweets.setLayoutManager(linearLayoutManager);
@@ -85,6 +91,9 @@ public abstract class TweetsListFragment extends Fragment {
                 e.printStackTrace();
             }
             newTweets.add(tweet);
+            if (this instanceof HomeTimelineFragment) {
+                ((HomeTimelineFragment)this).getFriendProfile(tweet.user.screenName);
+            }
         }
 
         if (!append) {
@@ -130,6 +139,9 @@ public abstract class TweetsListFragment extends Fragment {
             e.printStackTrace();
         }
         tweets.add(0, t);
+        if (this instanceof HomeTimelineFragment) {
+            ((HomeTimelineFragment)this).getFriendProfile(t.user.screenName);
+        }
         tweetAdapter.notifyItemInserted(0);
         // make sure we can view it on top of home timeline
         rvTweets.scrollToPosition(0);
