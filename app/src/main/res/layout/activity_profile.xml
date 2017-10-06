@@ -51,6 +51,7 @@
         android:id="@+id/tvTweetHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="5dp"
         android:textStyle=""
         android:textColor="@color/tweet_blue"
         android:text="@string/tweet_header" />
@@ -64,7 +65,8 @@
     <FrameLayout
         android:id="@+id/tweetsList_placeholder"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/tweet_white">
     </FrameLayout>
 
 
