@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,9 +79,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
 
             @Override
             public void onClick(View view) {
-                Log.d("DEBUG", "onClick Profile Image"); //TODO delete
-                // call the interface in the activity?
-                if(callback != null) {
+                if (callback != null) {
                     callback.onTweetUserClicked(screenName);
                 }
             }

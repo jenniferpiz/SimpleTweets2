@@ -34,7 +34,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.TimelineActivity"></activity>
-        <activity android:name=".activities.ShowProfileActivity"></activity>
+        <activity android:name=".activities.ShowProfileActivity"
+            android:theme="@style/AppProfileTheme">
+
+        </activity>
     </application>
 
 </manifest>

@@ -37,7 +37,7 @@ public class TwitterClient extends OAuthBaseClient {
 						context.getString(R.string.intent_scheme), context.getPackageName(), FALLBACK_URL));
 	}
 
-	public enum GetType {HOME, MENTIONS, MIPROFILE, USERPROFILE}
+	public enum GetType {HOME, MENTIONS, USERTIMELINE, USERPROFILE}
 
 
 	public void getTimeline(GetType type, long id, String screenName, AsyncHttpResponseHandler handler) {
@@ -50,7 +50,7 @@ public class TwitterClient extends OAuthBaseClient {
             case MENTIONS:
                 apiStr = "statuses/mentions_timeline.json";
                 break;
-            case MIPROFILE:
+            case USERTIMELINE:
                 apiStr = "statuses/user_timeline.json";
                 break;
             case USERPROFILE:
@@ -64,7 +64,7 @@ public class TwitterClient extends OAuthBaseClient {
 		RequestParams params = new RequestParams();
 		params.put("count", maxTweets);
 		String idParam = (id <= 1) ? "since_id" : "max_id";
-        if (type == GetType.MIPROFILE || type == GetType.USERPROFILE) {
+        if (type == GetType.USERTIMELINE || type == GetType.USERPROFILE) {
             params.put("screen_name", screenName);
         }
 		params.put(idParam, Long.toString(Math.abs(id)));

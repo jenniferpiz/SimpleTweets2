@@ -43,13 +43,11 @@ public class ProfileTweetsFragment extends  TweetsListFragment {
 
     void populateTimeline(final long id) {
 
-       client.getTimeline(TwitterClient.GetType.MIPROFILE, id, user.screenName, new JsonHttpResponseHandler() {
+       client.getTimeline(TwitterClient.GetType.USERTIMELINE, id, user.screenName, new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-
                 addItems(response, id > 0);
-                super.onSuccess(statusCode, headers, response); // TODO delete?
             }
 
             @Override

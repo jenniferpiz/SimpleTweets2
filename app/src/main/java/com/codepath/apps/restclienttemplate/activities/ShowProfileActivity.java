@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.text.Spanned;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,6 +32,9 @@ public class ShowProfileActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         user = (User) Parcels.unwrap(getIntent().getParcelableExtra("user"));
 
         client = TwitterApp.getRestClient();
@@ -40,6 +44,9 @@ public class ShowProfileActivity extends AppCompatActivity {
 
         TextView tvUserName = (TextView) findViewById(R.id.tvUserName);
         tvUserName.setText(String.format("@" + user.screenName));
+
+        TextView tvTagline = (TextView) findViewById(R.id.tvTagline);
+        tvTagline.setText(user.tagLine);
 
         TextView tvFollowing = (TextView) findViewById(R.id.tvFollowing);
         Spanned sp = Html.fromHtml("<b>" +user.countFollowing +"</b>"+" Following");
@@ -57,7 +64,18 @@ public class ShowProfileActivity extends AppCompatActivity {
         ft.replace(R.id.tweetsList_placeholder, fragmentDemo);
         ft.commit();
 
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // This is the up button
+            case android.R.id.home:
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
 }

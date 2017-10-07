@@ -33,5 +33,26 @@
     <style name="MyActionBarTabText" parent="@style/Widget.AppCompat.ActionBar.TabText">
         <item name="android:textColor">@color/tweet_blue</item>
     </style>
+
+    <!-- User Profile theme. -->
+    <style name="AppProfileTheme" parent="AppBaseTheme">
+        <item name="android:actionBarStyle">@style/ProfileActionBar</item>
+        <item name="actionBarStyle">@style/ProfileActionBar</item>
+
+    </style>
+
+    <style name="ProfileActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@color/tweet_blue</item>
+        <item name="background">@color/tweet_blue</item>
+
+        <item name="android:titleTextStyle">@style/ProfileActionBar.TitleTextStyle</item>
+        <item name="titleTextStyle">@style/ProfileActionBar.TitleTextStyle</item>
+    </style>
+
+    <style name="ProfileActionBar.TitleTextStyle"
+        parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/tweet_blue</item>
+    </style>
+
 </resources>
 

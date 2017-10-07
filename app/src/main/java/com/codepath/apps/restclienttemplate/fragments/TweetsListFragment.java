@@ -51,6 +51,7 @@ public abstract class TweetsListFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
         client = TwitterApp.getRestClient();
 
     }
