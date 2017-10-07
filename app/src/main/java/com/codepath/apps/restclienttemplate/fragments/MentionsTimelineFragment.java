@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.codepath.apps.restclienttemplate.TwitterApp;
 import com.codepath.apps.restclienttemplate.network.TwitterClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -18,12 +17,12 @@ import cz.msebera.android.httpclient.Header;
  */
 
 public class MentionsTimelineFragment extends  TweetsListFragment {
-    TwitterClient client;
+    //TwitterClient client;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        client = TwitterApp.getRestClient();
+        //client = TwitterApp.getRestClient();
         populateTimeline(1);
 
     }

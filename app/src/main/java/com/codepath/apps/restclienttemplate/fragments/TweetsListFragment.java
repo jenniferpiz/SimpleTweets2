@@ -11,16 +11,23 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.codepath.apps.restclienttemplate.R;
+import com.codepath.apps.restclienttemplate.TwitterApp;
 import com.codepath.apps.restclienttemplate.activities.TimelineActivity;
 import com.codepath.apps.restclienttemplate.adapters.TweetAdapter;
 import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.codepath.apps.restclienttemplate.models.User;
+import com.codepath.apps.restclienttemplate.network.TwitterClient;
 import com.codepath.apps.restclienttemplate.utils.EndlessRecyclerViewScrollListener;
+import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import cz.msebera.android.httpclient.Header;
 
 import static com.codepath.apps.restclienttemplate.network.TwitterClient.maxTweets;
 
@@ -34,12 +41,18 @@ public abstract class TweetsListFragment extends Fragment {
     RecyclerView rvTweets;
     LinearLayoutManager linearLayoutManager;
     EndlessRecyclerViewScrollListener scrollListener;
+    TwitterClient client;
+    static HashMap<String, User> friends = new HashMap<String, User>();
+
 
     abstract void populateTimeline(long id);
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        client = TwitterApp.getRestClient();
+        //friends = new HashMap<String, User>();
+
     }
 
     @Override
@@ -79,6 +92,7 @@ public abstract class TweetsListFragment extends Fragment {
 
     }
 
+
     public void addItems(JSONArray response, boolean append) {
 
         ArrayList<Tweet> newTweets = new ArrayList<Tweet>();
@@ -91,9 +105,8 @@ public abstract class TweetsListFragment extends Fragment {
                 e.printStackTrace();
             }
             newTweets.add(tweet);
-            if (this instanceof HomeTimelineFragment) {
-                ((HomeTimelineFragment)this).getFriendProfile(tweet.user.screenName);
-            }
+            getFriendProfile(tweet.user.screenName);
+
         }
 
         if (!append) {
@@ -139,14 +152,50 @@ public abstract class TweetsListFragment extends Fragment {
             e.printStackTrace();
         }
         tweets.add(0, t);
-        if (this instanceof HomeTimelineFragment) {
-            ((HomeTimelineFragment)this).getFriendProfile(t.user.screenName);
-        }
+        getFriendProfile(t.user.screenName);
+
         tweetAdapter.notifyItemInserted(0);
         // make sure we can view it on top of home timeline
         rvTweets.scrollToPosition(0);
     }
 
+
+    void getFriendProfile(final String screenName)  {
+
+        client.getTimeline(TwitterClient.GetType.USERPROFILE, 0, screenName, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    if (friends.containsKey(screenName)) {
+                        return;
+                    }
+                    friends.put(screenName, User.fromJSON(response));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                new Throwable().printStackTrace();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                new Throwable().printStackTrace();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                new Throwable().printStackTrace();
+            }
+        });
+
+    }
+
+    public User getFriend(String screenName) {
+        return friends.get(screenName);
+    }
 
     public long getId (int pos) {
         return tweets.get(pos).uid;

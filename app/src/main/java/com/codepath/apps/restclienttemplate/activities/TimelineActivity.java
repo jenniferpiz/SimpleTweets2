@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -84,7 +83,6 @@ public class TimelineActivity extends AppCompatActivity implements TweetFragment
 
     @Override
     public void onTweetUserClicked(String screenName) {
-        Log.d("DEBUG", "screenName="+screenName);
 
         //TODO for testing only
         Fragment page = pagerAdapter.getRegisteredFragment(0);
@@ -92,6 +90,7 @@ public class TimelineActivity extends AppCompatActivity implements TweetFragment
 
             //((HomeTimelineFragment)page).getFriendProfile(screenName);
             User user = ((HomeTimelineFragment)page).getFriend(screenName);
+            //User user = HomeTimelineFragment.friends.get(screenName); //TODO check for user = null?
             Intent intent = new Intent(this, ShowProfileActivity.class);
             intent.putExtra("user", Parcels.wrap(user));
             startActivity(intent);
