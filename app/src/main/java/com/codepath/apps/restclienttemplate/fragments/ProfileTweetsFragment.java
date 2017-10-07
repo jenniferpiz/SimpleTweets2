@@ -45,31 +45,26 @@ public class ProfileTweetsFragment extends  TweetsListFragment {
 
        client.getTimeline(TwitterClient.GetType.MIPROFILE, id, user.screenName, new JsonHttpResponseHandler() {
 
-           @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                super.onSuccess(statusCode, headers, response); // TODO delete
-            }
-
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
 
                 addItems(response, id > 0);
-                super.onSuccess(statusCode, headers, response);
+                super.onSuccess(statusCode, headers, response); // TODO delete?
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse); //TODO throwable
+                new Throwable().printStackTrace();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
+                new Throwable().printStackTrace();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                super.onFailure(statusCode, headers, responseString, throwable);
+                new Throwable().printStackTrace();
             }
         });
     }

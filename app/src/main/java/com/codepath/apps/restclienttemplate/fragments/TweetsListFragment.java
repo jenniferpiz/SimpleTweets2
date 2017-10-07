@@ -49,9 +49,9 @@ public abstract class TweetsListFragment extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         client = TwitterApp.getRestClient();
-        //friends = new HashMap<String, User>();
 
     }
 
@@ -67,7 +67,7 @@ public abstract class TweetsListFragment extends Fragment {
 
         tweets = new ArrayList<>();
 
-        if (getActivity() instanceof TimelineActivity) { //TODO shorten it using ? :
+        if (getActivity() instanceof TimelineActivity) {
             tweetAdapter = new TweetAdapter(tweets, (TimelineActivity) getActivity());
         } else {
             tweetAdapter = new TweetAdapter(tweets, null);
@@ -193,13 +193,8 @@ public abstract class TweetsListFragment extends Fragment {
 
     }
 
-    public User getFriend(String screenName) {
-        return friends.get(screenName);
-    }
-
     public long getId (int pos) {
         return tweets.get(pos).uid;
     }
-
 
 }

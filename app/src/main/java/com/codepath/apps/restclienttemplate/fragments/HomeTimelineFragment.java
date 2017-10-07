@@ -19,20 +19,21 @@ import cz.msebera.android.httpclient.Header;
  */
 
 public class HomeTimelineFragment extends TweetsListFragment {
-    //TwitterClient client;
     User user;
-    User friend;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         getMyProfile();
+
         populateTimeline(1);
 
     }
 
 
     private void getMyProfile() {
+
         client.getProfileInfo(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -61,8 +62,6 @@ public class HomeTimelineFragment extends TweetsListFragment {
         });
 
     }
-
-
 
 
     void populateTimeline (final long id) {
@@ -132,6 +131,5 @@ public class HomeTimelineFragment extends TweetsListFragment {
     public User getUser() {
         return this.user;
     }
-
 
 }
