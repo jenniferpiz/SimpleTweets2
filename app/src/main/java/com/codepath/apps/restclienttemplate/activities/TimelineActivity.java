@@ -82,6 +82,8 @@ public class TimelineActivity extends AppCompatActivity implements TweetFragment
         if (page != null && page instanceof HomeTimelineFragment) {
             ((HomeTimelineFragment)page).postNewTweet(s);
         }
+
+        viewPager.setCurrentItem(0);
     }
 
     @Override

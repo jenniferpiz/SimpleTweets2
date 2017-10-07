@@ -6,13 +6,13 @@ tools:context="com.codepath.jennifergodinez.nytimessearch.activities.TimelineAct
 
     <item
         android:id="@+id/myprofile"
-        android:orderInCategory="2"
+        android:orderInCategory="1"
         android:title="Item"
         android:icon="@drawable/ic_person_outline"
         app:showAsAction="always" />
     <item
         android:id="@+id/twit"
-        android:orderInCategory="1"
+        android:orderInCategory="2"
         android:icon="@drawable/twitter_logo"
         app:showAsAction="ifRoom|withText"
         android:title="Filter">

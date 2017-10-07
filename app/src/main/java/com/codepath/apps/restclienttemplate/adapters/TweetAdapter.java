@@ -97,7 +97,12 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         int start = s.indexOf("#") + 1;
         String prefix = s.substring(0, start);
         String suffix = s.substring(start);
-        return prefix.replace("#", colorCodeStart+"#") + suffix.replaceFirst(" ", colorCodeEnd+" ");
+        String s2 =  prefix.replace("#", colorCodeStart+"#") + suffix.replaceFirst(" ", colorCodeEnd+" ");
+
+        start = s2.indexOf("@") + 1;
+        prefix = s2.substring(0, start);
+        suffix = s2.substring(start);
+        return prefix.replace("@", colorCodeStart+"@") + suffix.replaceFirst(" ", colorCodeEnd+" ");
     }
 
     private String getRelativeTimeAgo(String rawJsonDate) {
