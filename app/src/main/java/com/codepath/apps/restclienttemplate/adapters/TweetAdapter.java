@@ -17,6 +17,7 @@ import com.codepath.apps.restclienttemplate.models.Tweet;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -106,6 +107,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
     }
 
     private String getRelativeTimeAgo(String rawJsonDate) {
+        boolean sameYr = true;
         String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
         SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
         sf.setLenient(true);
@@ -115,6 +117,10 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             long dateMillis = sf.parse(rawJsonDate).getTime();
             relativeDate = DateUtils.getRelativeTimeSpanString(dateMillis,
                     System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
+            Calendar c = Calendar.getInstance();
+            int currentYr = c.get(Calendar.YEAR);
+            c.setTimeInMillis(dateMillis);
+            sameYr =  (c.get(Calendar.YEAR) - currentYr) == 0;
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -126,7 +132,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         } else if (relativeDate.substring(0, 1).matches("[0-9]")) {
             int cutIndex = relativeDate.indexOf(' ') + 1;
             str = relativeDate.replace(" ", "").substring(0, cutIndex);
-        } else if (!relativeDate.startsWith("in ")){
+        } else if (!relativeDate.startsWith("in ") && sameYr){
             int pos = relativeDate.indexOf(",");
             str = relativeDate.substring(0, pos);
         }
