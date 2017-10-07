@@ -42,7 +42,7 @@ public abstract class TweetsListFragment extends Fragment {
     LinearLayoutManager linearLayoutManager;
     EndlessRecyclerViewScrollListener scrollListener;
     TwitterClient client;
-    static HashMap<String, User> friends = new HashMap<String, User>();
+    public static HashMap<String, User> friends = new HashMap<String, User>();
 
 
     abstract void populateTimeline(long id);

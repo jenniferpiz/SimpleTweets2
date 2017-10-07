@@ -15,6 +15,7 @@ import com.codepath.apps.restclienttemplate.adapters.TweetAdapter;
 import com.codepath.apps.restclienttemplate.adapters.TweetsPagerAdapter;
 import com.codepath.apps.restclienttemplate.fragments.HomeTimelineFragment;
 import com.codepath.apps.restclienttemplate.fragments.TweetFragment;
+import com.codepath.apps.restclienttemplate.fragments.TweetsListFragment;
 import com.codepath.apps.restclienttemplate.models.User;
 
 import org.parceler.Parcels;
@@ -75,7 +76,9 @@ public class TimelineActivity extends AppCompatActivity implements TweetFragment
 
     @Override
     public void onPassTweetMsg(String s) {
+
         Fragment page = pagerAdapter.getRegisteredFragment(0);
+
         if (page != null && page instanceof HomeTimelineFragment) {
             ((HomeTimelineFragment)page).postNewTweet(s);
         }
@@ -84,18 +87,12 @@ public class TimelineActivity extends AppCompatActivity implements TweetFragment
     @Override
     public void onTweetUserClicked(String screenName) {
 
-        //TODO for testing only
-        Fragment page = pagerAdapter.getRegisteredFragment(0);
-        if (page != null && page instanceof HomeTimelineFragment) {
+        User user = TweetsListFragment.friends.get(screenName);
 
-            //((HomeTimelineFragment)page).getFriendProfile(screenName);
-            User user = ((HomeTimelineFragment)page).getFriend(screenName);
-            //User user = HomeTimelineFragment.friends.get(screenName); //TODO check for user = null?
-            Intent intent = new Intent(this, ShowProfileActivity.class);
-            intent.putExtra("user", Parcels.wrap(user));
-            startActivity(intent);
+        Intent intent = new Intent(this, ShowProfileActivity.class);
+        intent.putExtra("user", Parcels.wrap(user));
 
-        }
-
+        startActivity(intent);
     }
+
 }
