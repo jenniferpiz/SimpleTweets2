@@ -194,6 +194,14 @@ public abstract class TweetsListFragment extends Fragment {
 
     }
 
+    public boolean isFragmentOnline() {
+        if (getActivity() instanceof TimelineActivity) {
+            return ((TimelineActivity) getActivity()).isOnline();
+        } else {
+            return true;
+        }
+    }
+
     public long getId (int pos) {
         return tweets.get(pos).uid;
     }

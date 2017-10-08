@@ -1,10 +1,11 @@
 package com.codepath.apps.restclienttemplate.fragments;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.apps.TwitterApp;
-import com.codepath.apps.restclienttemplate.network.TwitterClient;
 import com.codepath.apps.restclienttemplate.models.User;
+import com.codepath.apps.restclienttemplate.network.TwitterClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
@@ -43,7 +44,13 @@ public class ProfileTweetsFragment extends  TweetsListFragment {
 
     void populateTimeline(final long id) {
 
-       client.getTimeline(TwitterClient.GetType.USERTIMELINE, id, user.screenName, new JsonHttpResponseHandler() {
+        if (!isFragmentOnline()) {
+            Toast.makeText(getActivity(), "No internet detected!",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        client.getTimeline(TwitterClient.GetType.USERTIMELINE, id, user.screenName, new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {

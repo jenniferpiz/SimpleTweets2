@@ -2,6 +2,7 @@ package com.codepath.apps.restclienttemplate.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.network.TwitterClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -25,6 +26,13 @@ public class MentionsTimelineFragment extends  TweetsListFragment {
     }
 
     void populateTimeline(final long id) {
+
+        if (!isFragmentOnline()) {
+            Toast.makeText(getActivity(), "No internet detected!",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
+
         client.getTimeline(TwitterClient.GetType.MENTIONS, id, "", new JsonHttpResponseHandler() {
 
             @Override

@@ -3,6 +3,7 @@ package com.codepath.apps.restclienttemplate.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.models.User;
 import com.codepath.apps.restclienttemplate.network.TwitterClient;
@@ -26,13 +27,18 @@ public class HomeTimelineFragment extends TweetsListFragment {
 
         super.onCreate(savedInstanceState);
         getMyProfile();
-
         populateTimeline(1);
 
     }
 
 
     private void getMyProfile() {
+
+        if (!isFragmentOnline()) {
+            Toast.makeText(getActivity(), "No internet detected!",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
 
         client.getProfileInfo(new JsonHttpResponseHandler() {
             @Override
@@ -65,6 +71,12 @@ public class HomeTimelineFragment extends TweetsListFragment {
 
 
     void populateTimeline (final long id) {
+
+        if (!isFragmentOnline()) {
+            Toast.makeText(getActivity(), "No internet detected!",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
 
         client.getTimeline(TwitterClient.GetType.HOME, id, "", new JsonHttpResponseHandler() {
             @Override
