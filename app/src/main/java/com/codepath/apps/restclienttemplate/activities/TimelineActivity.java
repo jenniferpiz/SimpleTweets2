@@ -103,7 +103,7 @@ public class TimelineActivity extends AppCompatActivity implements TweetFragment
 
 
     @Override
-    public void onPassTweetMsg(String s) {
+    public void onFinishComposingNewTweet(String s) {
 
         Fragment page = pagerAdapter.getRegisteredFragment(0);
 

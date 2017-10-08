@@ -41,7 +41,7 @@ public class TweetFragment extends DialogFragment {
     }
 
     public interface ComposeTweetListener {
-        void onPassTweetMsg(String s);
+        void onFinishComposingNewTweet(String s);
     }
 
     @Override
@@ -85,7 +85,7 @@ public class TweetFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 ComposeTweetListener l = (ComposeTweetListener)getActivity();
-                l.onPassTweetMsg(etTweetMsg.getText().toString());
+                l.onFinishComposingNewTweet(etTweetMsg.getText().toString());
                 dismiss();
             }
         });
