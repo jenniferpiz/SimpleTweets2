@@ -27,15 +27,42 @@ public class TimelineActivity extends AppCompatActivity implements TweetFragment
 
     TweetsPagerAdapter pagerAdapter;
     ViewPager viewPager;
+    boolean newTweetExists;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
 
+        newTweetExists = false;
+
         viewPager = (ViewPager)findViewById(R.id.viewpager);
         pagerAdapter = new TweetsPagerAdapter(getSupportFragmentManager(), this);
         viewPager.setAdapter(pagerAdapter);
+
+        // forces to refresh Mentions tab if there is a new tweet to make sure we get latest mentions
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+            @Override
+            public void onPageSelected(int position) {
+
+                if (newTweetExists && (position==1)) {
+                    viewPager.getAdapter().notifyDataSetChanged();
+                    newTweetExists = false;
+                }
+
+            }
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                // Code goes here
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                // Code goes here
+            }
+        });
 
         TabLayout tabLayout = (TabLayout)findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
@@ -112,6 +139,9 @@ public class TimelineActivity extends AppCompatActivity implements TweetFragment
         }
 
         viewPager.setCurrentItem(0);
+
+        newTweetExists = true;
+
     }
 
     @Override
