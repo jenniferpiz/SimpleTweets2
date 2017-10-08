@@ -13,6 +13,8 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_margin="20dp"
+        android:background="@color/tweet_blue"
+        android:textColor="@color/off_white"
         android:onClick="loginToRest"
         android:text="@string/login_label" />
 
