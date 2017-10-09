@@ -1,5 +1,7 @@
 package com.codepath.apps.restclienttemplate.fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,9 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.codepath.apps.restclienttemplate.R;
-import com.codepath.apps.restclienttemplate.apps.TwitterApp;
 import com.codepath.apps.restclienttemplate.activities.TimelineActivity;
 import com.codepath.apps.restclienttemplate.adapters.TweetAdapter;
+import com.codepath.apps.restclienttemplate.apps.TwitterApp;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.apps.restclienttemplate.models.User;
 import com.codepath.apps.restclienttemplate.network.TwitterClient;
@@ -68,10 +70,32 @@ public abstract class TweetsListFragment extends Fragment {
 
         tweets = new ArrayList<>();
 
+        TweetAdapter.OnItemClickListener listener = new TweetAdapter.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(View view, int position) {
+                Tweet tweet = tweets.get(position);
+
+                AlertDialog.Builder b = new AlertDialog.Builder(getContext());
+                b.setMessage(tweet.body);
+                b.setTitle("@"+tweet.user.screenName);
+                b.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (dialog != null)  {
+                            dialog.dismiss();
+                        }
+                    }
+
+                });
+                b.show();
+            }
+        };
+
         if (getActivity() instanceof TimelineActivity) {
-            tweetAdapter = new TweetAdapter(tweets, (TimelineActivity) getActivity());
+            tweetAdapter = new TweetAdapter(tweets, (TimelineActivity) getActivity(), listener);
         } else {
-            tweetAdapter = new TweetAdapter(tweets, null);
+            tweetAdapter = new TweetAdapter(tweets, null, listener);
         }
 
         linearLayoutManager = new LinearLayoutManager(getContext());

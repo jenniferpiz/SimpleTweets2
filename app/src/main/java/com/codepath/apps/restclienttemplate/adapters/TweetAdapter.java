@@ -41,15 +41,21 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
     List<Tweet> mTweets;
     Context context;
     AdapterCallback callback;
+    OnItemClickListener listener;
 
     public interface AdapterCallback{
         void onTweetUserClicked(String screenName);
     }
 
-    public TweetAdapter(List<Tweet> mTweets, AdapterCallback callback) {
+    public interface OnItemClickListener {
+        void onItemClick(View itemView, int position);
+    }
+
+    public TweetAdapter(List<Tweet> mTweets, AdapterCallback callback, OnItemClickListener listener) {
 
         this.mTweets = mTweets;
         this.callback = callback;
+        this.listener = listener;
     }
 
     @Override
@@ -59,7 +65,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
 
         View tweetView = inflater.inflate(R.layout.item_tweet, parent, false);
 
-        ViewHolder viewHolder = new ViewHolder(tweetView);
+        ViewHolder viewHolder = new ViewHolder(tweetView, listener);
         return viewHolder;
     }
 
@@ -198,7 +204,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         public ImageView ivDisplay;
 
 
-        public ViewHolder (View itemView) {
+        public ViewHolder (final View itemView, final OnItemClickListener listener) {
             super(itemView);
 
             ivProfileImage = (ImageView)itemView.findViewById(R.id.ivProfileImage);
@@ -207,6 +213,15 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             tvTimeStamp = (TextView)itemView.findViewById(R.id.tvTimeStamp);
             tvScreenName = (TextView)itemView.findViewById(R.id.tvScreenName);
             ivDisplay = (ImageView)itemView.findViewById(R.id.ivDisplay);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        listener.onItemClick(itemView, position);
+                    }
+                }
+            });
 
         }
 
