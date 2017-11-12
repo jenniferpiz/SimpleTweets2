@@ -36,7 +36,11 @@
         <activity android:name=".activities.TimelineActivity"></activity>
         <activity android:name=".activities.ShowProfileActivity"
             android:theme="@style/AppProfileTheme">
-
+        </activity>
+        <activity android:name=".activities.NewTweetActivity"
+            android:theme="@style/AppProfileTheme"
+            android:parentActivityName="com.codepath.apps.restclienttemplate.activities.TimelineActivity"
+            android:windowSoftInputMode="stateVisible">
         </activity>
     </application>
 

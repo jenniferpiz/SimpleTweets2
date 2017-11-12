@@ -3,44 +3,27 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/dlg_compose"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:layout_gravity="center" android:orientation="vertical"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:layout_gravity="top" android:orientation="vertical"
+    android:elevation="8dp"
     android:weightSum="1">
-
-    <TextView
-        android:id="@+id/lbl_compose"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/tweet_blue"
-        android:padding="5dp"
-        android:text="@string/compose"
-        android:textAlignment="center"
-        android:textColor="@color/off_white"
-        android:textSize="12sp" />
 
     <EditText
         android:id="@+id/etTweetMsg"
         android:layout_width="match_parent"
-        android:layout_height="152dp"
-        android:inputType="textMultiLine"
+        android:layout_height="108dp"
+        android:layout_weight="0.09"
+        android:background="@drawable/message_box"
+        android:gravity="top"
         android:hint="@string/tweet_hint"
-        android:paddingTop="5dp"
+        android:imeOptions="actionDone"
+        android:inputType="textMultiLine"
         android:paddingBottom="5dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:gravity="top"
-        android:background="@android:color/transparent"
-        android:imeOptions="actionDone"
-        android:layout_weight="0.09" />
+        android:paddingTop="10dp"
+        android:textSize="16sp" />
 
-    <!-- Button
-        android:id="@+id/btnTweet"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/tweet_blue"
-        android:elevation="6dp"
-        android:text="@string/tweet"
-        android:textColor="@color/off_white" /-->
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -71,6 +54,7 @@
             android:layout_toStartOf="@+id/btnTweet"
             android:paddingRight="5dp"
             android:text="140"
+            android:textColor="@android:color/darker_gray"
             android:textSize="12sp" />
     </RelativeLayout>
 </LinearLayout>

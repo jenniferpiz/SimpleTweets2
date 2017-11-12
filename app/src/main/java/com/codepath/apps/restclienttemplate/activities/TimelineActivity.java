@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -15,7 +14,6 @@ import com.codepath.apps.restclienttemplate.R;
 import com.codepath.apps.restclienttemplate.adapters.TweetAdapter;
 import com.codepath.apps.restclienttemplate.adapters.TweetsPagerAdapter;
 import com.codepath.apps.restclienttemplate.fragments.HomeTimelineFragment;
-import com.codepath.apps.restclienttemplate.fragments.TweetFragment;
 import com.codepath.apps.restclienttemplate.fragments.TweetsListFragment;
 import com.codepath.apps.restclienttemplate.models.User;
 
@@ -23,11 +21,12 @@ import org.parceler.Parcels;
 
 import java.io.IOException;
 
-public class TimelineActivity extends AppCompatActivity implements TweetFragment.ComposeTweetListener, TweetAdapter.AdapterCallback {
+public class TimelineActivity extends AppCompatActivity implements TweetAdapter.AdapterCallback {
 
     TweetsPagerAdapter pagerAdapter;
     ViewPager viewPager;
     boolean newTweetExists;
+    static int REQUEST_CODE=200;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,10 +87,8 @@ public class TimelineActivity extends AppCompatActivity implements TweetFragment
                     Toast.makeText(this, "No internet detected!",
                             Toast.LENGTH_LONG).show();
                 } else {
-                    FragmentManager fm = getSupportFragmentManager();
-
-                    TweetFragment tweetFragment = TweetFragment.newInstance("Some Title");
-                    tweetFragment.show(fm, "fragment_tweet");
+                    Intent i = new Intent(this, NewTweetActivity.class);
+                    startActivityForResult(i, REQUEST_CODE);
                 }
                 return true;
 
@@ -129,20 +126,24 @@ public class TimelineActivity extends AppCompatActivity implements TweetFragment
     }
 
 
+    // ActivityOne.java, time to handle the result of the sub-activity
     @Override
-    public void onFinishComposingNewTweet(String s) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+            String msg = data.getExtras().getString("message");
 
-        Fragment page = pagerAdapter.getRegisteredFragment(0);
+            Fragment page = pagerAdapter.getRegisteredFragment(0);
 
-        if (page != null && page instanceof HomeTimelineFragment) {
-            ((HomeTimelineFragment)page).postNewTweet(s);
+            if (page != null && page instanceof HomeTimelineFragment) {
+                ((HomeTimelineFragment)page).postNewTweet(msg);
+            }
+
+            viewPager.setCurrentItem(0);
+
+            newTweetExists = true;
         }
-
-        viewPager.setCurrentItem(0);
-
-        newTweetExists = true;
-
     }
+
 
     @Override
     public void onTweetUserClicked(String screenName) {
