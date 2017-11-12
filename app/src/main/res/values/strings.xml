@@ -11,4 +11,5 @@
     <string name="tweet_hint">What is happening?</string>
     <string name="tweet">Tweet</string>
     <string name="tweet_header">Tweets</string>
+    <string name="app_title">JTweeter</string>
 </resources>

@@ -3,8 +3,11 @@ package com.codepath.apps.restclienttemplate.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.codepath.apps.restclienttemplate.R;
 import com.codepath.apps.restclienttemplate.models.User;
 import com.codepath.apps.restclienttemplate.network.TwitterClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -45,6 +48,7 @@ public class HomeTimelineFragment extends TweetsListFragment {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
                     user = User.fromJSON(response);
+                    Glide.with(getContext()).load(user.profileImageUrl).into((ImageView)getActivity().findViewById(R.id.ivProfile));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

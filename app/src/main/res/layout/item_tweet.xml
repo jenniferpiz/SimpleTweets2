@@ -25,11 +25,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:paddingTop="5dp"
         android:layout_alignStart="@+id/tvBody"
+        android:paddingTop="5dp"
         android:text="TextView"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-        android:textSize="14sp" />
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/tvBody"
@@ -43,7 +43,8 @@
         android:linksClickable="true"
         android:maxLines="4"
         android:text="TextView"
-        android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/tvTimeStamp"
@@ -53,7 +54,8 @@
         android:layout_alignParentTop="true"
         android:text="9h"
         android:textAppearance="@style/TextAppearance.AppCompat.Notification.Info.Media"
-        android:textColor="@android:color/darker_gray" />
+        android:textColor="@android:color/darker_gray"
+        android:textSize="16sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -83,12 +85,12 @@
         android:id="@+id/tvScreenName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textSize="12sp"
-        tools:textColor="@android:color/darker_gray"
         android:layout_alignBottom="@+id/tvUserName"
+        android:layout_marginStart="13dp"
         android:layout_toEndOf="@+id/tvUserName"
-        android:layout_marginStart="13dp" />
+        android:text="TextView"
+        android:textSize="16sp"
+        tools:textColor="@android:color/darker_gray" />
 
 
 </RelativeLayout>

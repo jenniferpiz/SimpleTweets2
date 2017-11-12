@@ -34,6 +34,7 @@ public class ShowProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         user = (User) Parcels.unwrap(getIntent().getParcelableExtra("user"));
 

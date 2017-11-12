@@ -5,9 +5,11 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.R;
@@ -21,10 +23,13 @@ import org.parceler.Parcels;
 
 import java.io.IOException;
 
+
 public class TimelineActivity extends AppCompatActivity implements TweetAdapter.AdapterCallback {
 
+    User user;
     TweetsPagerAdapter pagerAdapter;
     ViewPager viewPager;
+    ImageView ivProfile;
     boolean newTweetExists;
     static int REQUEST_CODE=200;
 
@@ -32,6 +37,52 @@ public class TimelineActivity extends AppCompatActivity implements TweetAdapter.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
+
+        ActionBar mActionBar = getSupportActionBar();
+        mActionBar.setDisplayShowHomeEnabled(false);
+        mActionBar.setDisplayShowTitleEnabled(false);
+
+        mActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        mActionBar.setCustomView(R.layout.actionbar_title);
+
+        ImageButton ibTweet = (ImageButton)findViewById(R.id.ibTweet);
+        ibTweet.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                if (!isOnline()) {
+                    Toast.makeText(getBaseContext(), "No internet detected!",
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    Intent i = new Intent(getBaseContext(), NewTweetActivity.class);
+                    startActivityForResult(i, REQUEST_CODE);
+                }
+            }
+        });
+
+
+        ivProfile = (ImageView)findViewById(R.id.ivProfile);
+
+        ivProfile.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                if (!isOnline()) {
+                    Toast.makeText(getBaseContext(), "No internet detected!",
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    Fragment page = pagerAdapter.getRegisteredFragment(0);
+
+                    if (page != null && page instanceof HomeTimelineFragment) {
+                        User user = ((HomeTimelineFragment) page).getUser();
+                        Intent intent = new Intent(getBaseContext(), ShowProfileActivity.class);
+                        intent.putExtra("user", Parcels.wrap(user));
+                        startActivity(intent);
+                    }
+                }
+            }
+        });
+
 
         newTweetExists = false;
 
@@ -68,50 +119,7 @@ public class TimelineActivity extends AppCompatActivity implements TweetAdapter.
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_tweet, menu);
-        return true;
-    }
 
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-            case R.id.home:
-                return true;
-
-            case R.id.twit:
-                if (!isOnline()) {
-                    Toast.makeText(this, "No internet detected!",
-                            Toast.LENGTH_LONG).show();
-                } else {
-                    Intent i = new Intent(this, NewTweetActivity.class);
-                    startActivityForResult(i, REQUEST_CODE);
-                }
-                return true;
-
-            case R.id.myprofile:
-                if (!isOnline()) {
-                    Toast.makeText(this, "No internet detected!",
-                            Toast.LENGTH_LONG).show();
-                } else {
-                    Fragment page = pagerAdapter.getRegisteredFragment(0);
-
-                    if (page != null && page instanceof HomeTimelineFragment) {
-                        User user = ((HomeTimelineFragment) page).getUser();
-                        Intent intent = new Intent(this, ShowProfileActivity.class);
-                        intent.putExtra("user", Parcels.wrap(user));
-                        startActivity(intent);
-                    }
-                }
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 
 
     public boolean isOnline() {
