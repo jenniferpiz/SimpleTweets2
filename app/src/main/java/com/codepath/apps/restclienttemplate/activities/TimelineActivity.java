@@ -24,7 +24,7 @@ import org.parceler.Parcels;
 import java.io.IOException;
 
 
-public class TimelineActivity extends AppCompatActivity implements TweetAdapter.AdapterCallback {
+public class TimelineActivity extends AppCompatActivity implements TweetAdapter.AdapterCallback, TweetsListFragment.OnRefreshListener {
 
     User user;
     TweetsPagerAdapter pagerAdapter;
@@ -164,4 +164,16 @@ public class TimelineActivity extends AppCompatActivity implements TweetAdapter.
         startActivity(intent);
     }
 
+    @Override
+    public void onRefreshSelected() {
+
+        Fragment page = pagerAdapter.getRegisteredFragment(0);
+
+        if (page != null && page instanceof HomeTimelineFragment) {
+            ((HomeTimelineFragment)page).fetchTimelineAsync();
+        }
+
+        viewPager.setCurrentItem(0);
+
+    }
 }

@@ -1,10 +1,12 @@
 package com.codepath.apps.restclienttemplate.fragments;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,6 +30,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -41,13 +44,36 @@ public abstract class TweetsListFragment extends Fragment {
     TweetAdapter tweetAdapter;
     ArrayList<Tweet> tweets;
     RecyclerView rvTweets;
+    SwipeRefreshLayout swipeContainer;
     LinearLayoutManager linearLayoutManager;
     EndlessRecyclerViewScrollListener scrollListener;
     TwitterClient client;
+    OnRefreshListener mCallback;
     public static HashMap<String, User> friends = new HashMap<String, User>();
 
 
     abstract void populateTimeline(long id);
+
+    // Container Activity must implement this interface
+    public interface OnRefreshListener {
+        public void onRefreshSelected();
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        if (activity instanceof TimelineActivity) {
+            try {
+                mCallback = (OnRefreshListener) activity;
+            } catch (ClassCastException e) {
+                throw new ClassCastException(activity.toString()
+                        + " must implement OnRefreshListener");
+            }
+        }
+    }
+
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,6 +88,25 @@ public abstract class TweetsListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_tweets_list, container, false);
+
+
+        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (getActivity() instanceof TimelineActivity) {
+                    mCallback.onRefreshSelected();
+                } else {
+                    swipeContainer.setRefreshing(false);
+                }
+            }
+        });
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
 
         rvTweets = (RecyclerView) view.findViewById(R.id.rvTweet);
         RecyclerView.ItemDecoration itemDecoration = new
@@ -165,6 +210,18 @@ public abstract class TweetsListFragment extends Fragment {
             tweetAdapter.notifyItemRangeInserted(oldSize, n_tweets);
         }
 
+    }
+
+    // Clean all elements of the recycler
+    public void clear() {
+        tweets.clear();
+        tweetAdapter.notifyDataSetChanged();
+    }
+
+    // Add a list of items -- change to type used
+    public void addAll(List<Tweet> list) {
+        tweets.addAll(list);
+        tweetAdapter.notifyDataSetChanged();
     }
 
 

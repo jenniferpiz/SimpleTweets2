@@ -112,6 +112,29 @@ public class HomeTimelineFragment extends TweetsListFragment {
         });
     }
 
+    public void fetchTimelineAsync() {
+
+        //final Fragment f = pagerAdapter.getRegisteredFragment(0);
+        //TwitterClient client = ((TweetsListFragment)f).client;
+
+        client.getTimeline(TwitterClient.GetType.HOME, 1, "", new JsonHttpResponseHandler() {
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                // Remember to CLEAR OUT old items before appending in the new ones
+                clear();
+                // ...the data has come back, add new items to your adapter...
+                addItems(response, true);
+                // Now we call setRefreshing(false) to signal refresh has finished
+                swipeContainer.setRefreshing(false);
+            }
+
+            public void onFailure(Throwable e) {
+                Log.d("DEBUG", "Fetch timeline error: " + e.toString());
+            }
+        });
+    }
+
 
     public void postNewTweet(String s) {
 
